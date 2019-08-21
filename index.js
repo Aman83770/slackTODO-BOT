@@ -1,7 +1,7 @@
 /*
   index.js: root file of the project. 
 */
-
+require('dotenv').config()
 // Import required modules
 const express = require('express'),
   app = express(), // Initialize express app
@@ -10,7 +10,7 @@ const express = require('express'),
   bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/Tododb');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/Tododb');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
