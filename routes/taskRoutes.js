@@ -10,4 +10,6 @@ router.post("/get", task.getAllTaks);
 
 router.post("/delete", task.deleteTask);
 
+router.post("/deleteById", task.deleteTaskById);
+
 module.exports = router;
