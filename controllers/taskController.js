@@ -110,3 +110,56 @@ exports.deleteTask = function(req, res) {
     return res.json(final);
   });
 };
+
+exports.deleteTaskById = function(req, res) {
+  const data = req.body;
+  let final;
+
+  if (!data.id || data.id === "") {
+    final = {
+      // "response_type": "in_channel", // error should not be seen by all
+      "attachments": [
+        {
+            "color": "#FF4500",
+            "pretext": "An Error Happened",
+            "title": "Cannot delete todo without Id"
+        }
+      ]
+    }
+    return res.send(final);
+  }
+
+  Task.deleteOne({
+    id: data.id,
+    channel_id: data.channel_id
+  }, function(err, result) {
+    if (err)
+      return res.send(err);
+    // when there is no todo match
+    if (result.deletedCount < 1 ) {
+      final = {
+        // "response_type": "in_channel", // error should not be seen by all
+        "attachments": [
+          {
+              "color": "#FF4500",
+              "pretext": "An Error Happened",
+              "title": "No Todo found with this id"
+          }
+        ]
+      }
+      return res.send(final);
+    }
+
+    final = {
+      "response_type": "in_channel", // error should not be seen by all
+      "attachments": [
+        {
+            "color": "#008000",
+            "pretext": "TODO is removed from list",
+            "title": data.text
+        }
+      ]
+    }
+    return res.json(final);
+  });
+};
